@@ -1,0 +1,2823 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangla Narrative Studio Pro | AI Video-to-Bangla VO Scriptwriter</title>
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-surface: #111827;
+      --bg-elevated: #182235;
+      --bg-input: #0c1220;
+      --border: #243047;
+      --border-hover: #384a6b;
+      --amber: #f59e0b;
+      --amber-hover: #d97706;
+      --amber-soft: rgba(245, 158, 11, 0.14);
+      --gold-grad: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+      --emerald: #10b981;
+      --emerald-soft: rgba(16, 185, 129, 0.15);
+      --rose: #f43f5e;
+      --rose-soft: rgba(244, 63, 94, 0.15);
+      --sky: #38bdf8;
+      --sky-soft: rgba(56, 189, 248, 0.14);
+      --purple: #a855f7;
+      --purple-soft: rgba(168, 85, 247, 0.15);
+      --text-main: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+      --font-sans: 'Hind Siliguri', 'Noto Sans Bengali', 'SolaimanLipi', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: var(--bg-base); }
+    ::-webkit-scrollbar-thumb { background: #26334d; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3b4f75; }
+
+    /* Header */
+    .app-header {
+      background: rgba(17, 24, 39, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding: 12px 20px;
+    }
+
+    .header-inner {
+      max-width: 1520px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--gold-grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.35);
+      flex-shrink: 0;
+    }
+
+    .brand-title {
+      font-size: 1.18rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pro-badge {
+      background: var(--amber-soft);
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    .header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      color: var(--text-main);
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--border-hover);
+      background: #202d44;
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: var(--gold-grad);
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      filter: brightness(1.08);
+      background: var(--gold-grad);
+    }
+
+    .btn-emerald {
+      background: var(--emerald-soft);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .btn-emerald:hover:not(:disabled) {
+      background: rgba(16, 185, 129, 0.25);
+    }
+
+    .btn-rose {
+      background: var(--rose-soft);
+      border-color: rgba(244, 63, 94, 0.4);
+      color: #fb7185;
+    }
+
+    .btn-rose:hover:not(:disabled) {
+      background: rgba(244, 63, 94, 0.25);
+    }
+
+    .btn-sky {
+      background: var(--sky-soft);
+      border-color: rgba(56, 189, 248, 0.4);
+      color: #7dd3fc;
+    }
+
+    .btn-sm {
+      padding: 6px 10px;
+      font-size: 0.78rem;
+    }
+
+    /* Status Pill */
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--emerald-soft);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      cursor: pointer;
+    }
+
+    .status-pill.warning {
+      background: var(--amber-soft);
+      color: var(--amber);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .status-pill.error {
+      background: var(--rose-soft);
+      color: #fb7185;
+      border-color: rgba(244, 63, 94, 0.35);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    /* Main Workspace Grid */
+    .workspace {
+      max-width: 1520px;
+      margin: 20px auto;
+      padding: 0 20px 40px;
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1120px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .left-col, .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--text-main);
+    }
+
+    .step-badge {
+      width: 24px;
+      height: 24px;
+      border-radius: 7px;
+      background: var(--amber-soft);
+      color: var(--amber);
+      font-size: 0.78rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    /* Form Controls */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 540px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    select, input[type="text"], input[type="password"], textarea {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 9px 12px;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+
+    textarea {
+      resize: vertical;
+      line-height: 1.65;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: var(--bg-input);
+      padding: 5px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .tab-btn {
+      padding: 8px 10px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.18s;
+    }
+
+    .tab-btn.active {
+      background: var(--bg-elevated);
+      color: var(--amber);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Dropzone */
+    .dropzone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-input);
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--amber);
+      background: rgba(245, 158, 11, 0.05);
+    }
+
+    .dropzone-icon {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      border-radius: 12px;
+      background: var(--amber-soft);
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-preview {
+      margin-top: 12px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .file-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    video, audio {
+      width: 100%;
+      border-radius: var(--radius-sm);
+      max-height: 200px;
+      background: #000;
+    }
+
+    /* Tone & Vocabulary Tags */
+    .tags-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      max-height: 195px;
+      overflow-y: auto;
+      padding: 4px 2px;
+    }
+
+    .tag-pill {
+      padding: 6px 11px;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--bg-input);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.16s;
+    }
+
+    .tag-pill:hover {
+      border-color: var(--border-hover);
+      color: var(--text-main);
+    }
+
+    .tag-pill.selected {
+      background: var(--amber-soft);
+      color: #fbbf24;
+      border-color: rgba(245, 158, 11, 0.55);
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.18);
+    }
+
+    /* Progress Bar */
+    .progress-box {
+      margin-top: 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--amber);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: #1e293b;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gold-grad);
+      transition: width 0.25s ease;
+    }
+
+    /* Studio Stats & Toolbars */
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .stat-val {
+      color: var(--text-main);
+      font-weight: 700;
+      font-family: var(--font-mono);
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .rewrite-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 12px;
+      background: rgba(245, 158, 11, 0.06);
+      border: 1px solid rgba(245, 158, 11, 0.22);
+      border-radius: var(--radius-md);
+      margin-bottom: 14px;
+    }
+
+    .rewrite-label {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--amber);
+      margin-right: 4px;
+    }
+
+    /* Script Output Viewer */
+    .script-viewer {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      min-height: 460px;
+      max-height: 680px;
+      overflow-y: auto;
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: #f1f5f9;
+    }
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 380px;
+      color: var(--text-secondary);
+      padding: 24px;
+    }
+
+    .empty-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: var(--bg-elevated);
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+
+    /* Formatted Script Badges */
+    .beat-header {
+      display: block;
+      margin: 18px 0 8px;
+      padding: 7px 12px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0.03) 100%);
+      border-left: 3px solid var(--amber);
+      color: #fbbf24;
+      font-weight: 700;
+      font-size: 0.92rem;
+      font-family: var(--font-mono);
+    }
+
+    .beat-header:first-child {
+      margin-top: 0;
+    }
+
+    .cue-pause {
+      display: inline-block;
+      padding: 1px 8px;
+      margin: 0 3px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: var(--rose-soft);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+      vertical-align: middle;
+    }
+
+    .cue-tone {
+      display: inline-block;
+      padding: 1px 8px;
+      margin: 0 3px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: var(--sky-soft);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      vertical-align: middle;
+    }
+
+    .cue-sfx {
+      display: inline-block;
+      padding: 1px 8px;
+      margin: 0 3px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: var(--purple-soft);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      vertical-align: middle;
+    }
+
+    .script-para {
+      margin-bottom: 12px;
+    }
+
+    /* YouTube SEO Kit Box */
+    .seo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .seo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .seo-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+    }
+
+    .seo-box h4 {
+      font-size: 0.82rem;
+      color: var(--amber);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .seo-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.84rem;
+    }
+
+    .seo-list li {
+      background: var(--bg-elevated);
+      padding: 7px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* Modals & Drawers */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 7, 18, 0.82);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .modal-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Fullscreen Teleprompter + Voice Recorder */
+    .teleprompter-overlay {
+      position: fixed;
+      inset: 0;
+      background: #03050a;
+      z-index: 150;
+      display: none;
+      flex-direction: column;
+    }
+
+    .teleprompter-overlay.open {
+      display: flex;
+    }
+
+    .tp-topbar {
+      background: #0f1626;
+      border-bottom: 1px solid #1e293b;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tp-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tp-slider-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      background: #172033;
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid #26344f;
+    }
+
+    .tp-slider-group input[type="range"] {
+      width: 85px;
+      accent-color: var(--amber);
+    }
+
+    .tp-stage {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16vh 12% 45vh;
+      position: relative;
+      scroll-behavior: auto;
+    }
+
+    .tp-guide-line {
+      position: fixed;
+      top: 32%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 5%, rgba(245, 158, 11, 0.5) 50%, transparent 95%);
+      pointer-events: none;
+      z-index: 155;
+    }
+
+    .tp-text {
+      max-width: 920px;
+      margin: 0 auto;
+      font-size: 34px;
+      line-height: 1.85;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: pre-wrap;
+      transition: transform 0.2s;
+    }
+
+    .tp-text.mirrored {
+      transform: scaleX(-1);
+    }
+
+    .tp-recorder-dock {
+      background: #0f1626;
+      border-top: 1px solid #1e293b;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .rec-timer {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fb7185;
+      min-width: 68px;
+      text-align: center;
+    }
+
+    /* History List */
+    .history-item {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .history-info h4 {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .history-info p {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+    }
+
+    /* Alert Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-width: 380px;
+    }
+
+    .toast {
+      background: #182235;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--amber);
+      color: var(--text-main);
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.84rem;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
+      animation: slideIn 0.2s ease;
+    }
+
+    .toast.error { border-left-color: var(--rose); }
+    .toast.success { border-left-color: var(--emerald); }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <line x1="2" y1="7" x2="7" y2="7"></line>
+            <line x1="2" y1="17" x2="7" y2="17"></line>
+            <line x1="17" y1="17" x2="22" y2="17"></line>
+            <line x1="17" y1="7" x2="22" y2="7"></line>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-title">
+            Bangla Narrative Studio <span class="pro-badge">Pro</span>
+          </div>
+          <div class="brand-sub">AI Video Analysis &amp; Localized Bangla Voice-Over Scriptwriting Engine</div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="status-pill" id="engineStatusPill" title="Click to configure AI Backend">
+          <span class="dot"></span>
+          <span id="engineStatusText">Built-in Canvas Gemini Engine</span>
+        </button>
+
+        <button type="button" class="btn btn-sm" id="openApiModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
+          </svg>
+          API &amp; Providers
+        </button>
+
+        <button type="button" class="btn btn-sm" id="openPromptModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          System Prompt
+        </button>
+
+        <button type="button" class="btn btn-sm" id="openHistoryModalBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          History (<span id="historyCountBadge">0</span>)
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Two-Column Studio Workspace -->
+  <main class="workspace">
+    <!-- Left Column: Media Ingestion & Director Directives -->
+    <div class="left-col">
+      <!-- Card 1: Media Ingestion -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="step-badge">১</span>
+            মিডিয়া ইনপুট (Media Ingestion)
+          </h2>
+          <span style="font-size: 0.74rem; color: var(--text-secondary);" id="ingestionModeHint">Multimodal Ready</span>
+        </div>
+
+        <div class="tabs">
+          <button type="button" class="tab-btn active" data-tab="media" id="tabMediaBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="23 7 16 12 23 17 23 7"></polygon>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+            </svg>
+            Video / Audio File
+          </button>
+          <button type="button" class="tab-btn" data-tab="text" id="tabTextBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            Plot / SRT Subtitle
+          </button>
+        </div>
+
+        <!-- Tab A: Video/Audio File -->
+        <div id="mediaTabPane">
+          <div class="dropzone" id="dropzone">
+            <input type="file" id="mediaFileInput" accept="video/*,audio/*,.mp4,.webm,.mov,.mkv,.wav,.mp3" class="hidden" />
+            <div class="dropzone-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 4px;">ভিডিও বা অডিও ফাইল ড্রপ করুন অথবা ক্লিক করুন</div>
+            <div style="font-size: 0.76rem; color: var(--text-secondary);">MP4, WebM, MOV, MKV, WAV, MP3 (Gemini File API-তে বড় ফাইল সাপোর্টেড)</div>
+          </div>
+
+          <div id="filePreviewContainer" class="file-preview hidden">
+            <div class="file-meta">
+              <div style="min-width: 0;">
+                <div id="fileNameDisplay" style="font-size: 0.84rem; font-weight: 700; color: var(--amber); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></div>
+                <div id="fileMetaDisplay" style="font-size: 0.74rem; color: var(--text-secondary);"></div>
+              </div>
+              <button type="button" class="btn btn-rose btn-sm" id="removeFileBtn">Remove</button>
+            </div>
+            <video id="videoPreview" controls class="hidden"></video>
+            <audio id="audioPreview" controls class="hidden"></audio>
+          </div>
+        </div>
+
+        <!-- Tab B: Plot / SRT Subtitle -->
+        <div id="textTabPane" class="hidden">
+          <div class="form-group">
+            <label for="plotTextarea">
+              <span>মুভির গল্প, দৃশ্যের বর্ণনা বা .SRT সাবটাইটেল</span>
+              <span style="display: flex; gap: 6px;">
+                <button type="button" class="btn btn-sm" id="uploadSrtBtn" style="padding: 3px 8px; font-size: 0.72rem;">Upload .SRT/.TXT</button>
+                <button type="button" class="btn btn-sky btn-sm" id="loadSamplePlotBtn" style="padding: 3px 8px; font-size: 0.72rem;">Load Sample Plot</button>
+              </span>
+            </label>
+            <input type="file" id="srtFileInput" accept=".srt,.vtt,.txt" class="hidden" />
+            <textarea id="plotTextarea" rows="7" placeholder="এখানে মুভির কাহিনী, ইংরেজি/হিন্দি সংলাপ অথবা সম্পূর্ণ .SRT সাবটাইটেল পেস্ট করুন..."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Card 2: Expanded Director Directives -->
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="step-badge">২</span>
+            ডিরেক্টর নির্দেশনা (Director Directives)
+          </h2>
+          <button type="button" class="btn btn-sm" id="resetDirectivesBtn" style="padding: 4px 8px; font-size: 0.72rem;">Reset</button>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="sourceLangSelect">Source Language (মূল ভাষা)</label>
+            <select id="sourceLangSelect">
+              <option value="Auto-Detect">Auto-Detect (স্বয়ংক্রিয়)</option>
+              <option value="English">English (ইংরেজি)</option>
+              <option value="Hindi">Hindi (হিন্দি)</option>
+              <option value="Korean (K-Drama/Movie)">Korean (কোরিয়ান)</option>
+              <option value="Japanese (Anime)">Japanese (জাপানিজ অ্যানিমে)</option>
+              <option value="Chinese / Mandarin">Chinese / Mandarin (চাইনিজ)</option>
+              <option value="Tamil">Tamil (তামিল)</option>
+              <option value="Telugu">Telugu (তেলেগু)</option>
+              <option value="Malayalam">Malayalam (মালায়ালাম)</option>
+              <option value="Spanish">Spanish (স্প্যানিশ)</option>
+              <option value="French">French (ফরাসি)</option>
+              <option value="Turkish">Turkish (তুর্কি)</option>
+              <option value="Arabic">Arabic (আরবি)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="targetStyleSelect">Target Output Style</label>
+            <select id="targetStyleSelect">
+              <option value="Bangla (Bangladeshi Movie Explanation)">Bangla (Bangladeshi Movie Explanation)</option>
+              <option value="Bangla (Dramatic & Cinematic)">Bangla (Dramatic &amp; Cinematic)</option>
+              <option value="Bangla (Casual Adda & Storytelling)">Bangla (Casual Adda &amp; Storytelling)</option>
+              <option value="Bangla (Documentary / Ruhi Çenet Style)">Bangla (Documentary / Investigative)</option>
+              <option value="Bangla (Standard Neutral)">Bangla (প্রমিত ও নিরপেক্ষ)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="genreSelect">Genre Preset (জনরা)</label>
+            <select id="genreSelect">
+              <option value="Suspense & Psychological Thriller">Suspense &amp; Psychological Thriller</option>
+              <option value="Action & Revenge Saga">Action &amp; Revenge Saga</option>
+              <option value="Sci-Fi & Dystopian">Sci-Fi &amp; Dystopian</option>
+              <option value="Horror & Supernatural">Horror &amp; Supernatural</option>
+              <option value="Romantic & Emotional Drama">Romantic &amp; Emotional Drama</option>
+              <option value="Anime Recap & Shonen Action">Anime Recap &amp; Shonen Action</option>
+              <option value="Crime & Gangster Mystery">Crime &amp; Gangster Mystery</option>
+              <option value="Survival & Disaster">Survival &amp; Disaster</option>
+              <option value="Historical / War Epic">Historical / War Epic</option>
+              <option value="Comedy & Satire">Comedy &amp; Satire</option>
+              <option value="True Crime & Documentary">True Crime &amp; Documentary</option>
+              <option value="Mind-Bending Twist Movie">Mind-Bending Twist Movie</option>
+              <option value="Mystery & Detective">Mystery &amp; Detective</option>
+              <option value="Fantasy & Adventure">Fantasy &amp; Adventure</option>
+              <option value="Biographical Drama">Biographical Drama</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="pacingSelect">Narration Pacing (গতি)</label>
+            <select id="pacingSelect">
+              <option value="Balanced Storytelling (সুষম গতি)">Balanced Storytelling (সুষম গতি)</option>
+              <option value="Rapid-Fire Hook (দ্রুত ও উত্তেজনাপূর্ণ)">Rapid-Fire Hook (দ্রুত ও উত্তেজনাপূর্ণ)</option>
+              <option value="Slow-Burn & Deep Emotional (ধীর ও আবেগঘন)">Slow-Burn &amp; Deep Emotional (ধীর ও আবেগঘন)</option>
+              <option value="Documentary Investigative (তথ্যচিত্র ধাঁচের)">Documentary Investigative (তথ্যচিত্র ধাঁচের)</option>
+              <option value="Short / Reels Recap (৬০-৯০ সেকেন্ড)">Short / Reels Recap (৬০-৯০ সেকেন্ড)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="lengthSelect">Target Script Length (দৈর্ঘ্য)</label>
+            <select id="lengthSelect">
+              <option value="Auto (কনটেন্ট অনুযায়ী সম্পূর্ণ)">Auto (কনটেন্ট অনুযায়ী সম্পূর্ণ)</option>
+              <option value="Standard (৮-১২ মিনিট / ~১,২০০ শব্দ)">Standard (৮-১২ মিনিট / ~১,২০০ শব্দ)</option>
+              <option value="Short Recap (৪-৬ মিনিট / ~৬৫০ শব্দ)">Short Recap (৪-৬ মিনিট / ~৬৫০ শব্দ)</option>
+              <option value="Deep-Dive Long Form (১৫-২০+ মিনিট / ~২,২০০ শব্দ)">Deep-Dive Long Form (১৫-২০+ মিনিট)</option>
+              <option value="YouTube Shorts / Reels (৬০ সেকেন্ড / ~১৫০ শব্দ)">YouTube Shorts / Reels (৬০ সেকেন্ড)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="perspectiveSelect">Narrative Perspective (দৃষ্টিকোণ)</label>
+            <select id="perspectiveSelect">
+              <option value="Third-Person Omniscient (গল্পকথক ভঙ্গি)">Third-Person (গল্পকথক ভঙ্গি)</option>
+              <option value="First-Person ('আমি'-কেন্দ্রিক জবানবন্দি)">First-Person ("আমি"-কেন্দ্রিক জবানবন্দি)</option>
+              <option value="Investigative Host (দর্শকদের সাথে প্রশ্নোত্তর ভঙ্গি)">Investigative Host (প্রশ্নোত্তর ভঙ্গি)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span>Emotional Tone &amp; Vocabulary Tags (১৬টি কাস্টম ট্যাগ)</span>
+            <span id="selectedTagsCount" style="color: var(--amber); font-size: 0.74rem;">3 selected</span>
+          </label>
+          <div class="tags-cloud" id="toneTagsContainer"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="directorNotesInput">Custom Director Notes (ঐচ্ছিক বিশেষ নির্দেশনা)</label>
+          <textarea id="directorNotesInput" rows="2" placeholder="যেমন: শুরুতে একটি ভয়ংকর সাসপেন্স প্রশ্ন রাখুন, চরিত্রের নামগুলো স্পষ্টভাবে উল্লেখ করুন..."></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="generateScriptBtn" style="width: 100%; padding: 12px; font-size: 0.96rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Generate Bangla Voice-Over Script
+        </button>
+
+        <div id="progressBox" class="progress-box hidden">
+          <div class="progress-top">
+            <span id="progressLabel">Initializing...</span>
+            <span id="progressPercent">0%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Right Column: VO Script Studio & SEO Kit -->
+    <div class="right-col">
+      <section class="card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="step-badge">৩</span>
+            ভয়েস-ওভার স্ক্রিপ্ট স্টুডিও (Bangla VO Studio)
+          </h2>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-emerald btn-sm" id="openTeleprompterBtn" disabled>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+              Teleprompter &amp; Voice Booth
+            </button>
+          </div>
+        </div>
+
+        <!-- Live VO Stats Bar -->
+        <div class="stats-bar">
+          <div class="stat-item">
+            <span>মোট শব্দ (Words):</span>
+            <span class="stat-val" id="statWords">0</span>
+          </div>
+          <span style="color: var(--border);">|</span>
+          <div class="stat-item">
+            <span>আনুমানিক VO সময় (~130 WPM):</span>
+            <span class="stat-val" id="statDuration" style="color: var(--emerald);">00:00</span>
+          </div>
+          <span style="color: var(--border);">|</span>
+          <div class="stat-item">
+            <span>স্ট্রাকচারাল বিটস:</span>
+            <span class="stat-val" id="statBeats" style="color: var(--amber);">0</span>
+          </div>
+        </div>
+
+        <!-- Export & Edit Toolbar -->
+        <div class="toolbar-row">
+          <button type="button" class="btn btn-sm" id="toggleEditModeBtn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Edit Script
+          </button>
+
+          <button type="button" class="btn btn-sm" id="copyFullBtn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy Full
+          </button>
+
+          <button type="button" class="btn btn-sm" id="copyCleanBtn" disabled>
+            Copy Clean VO (No Tags)
+          </button>
+
+          <button type="button" class="btn btn-sm" id="downloadTxtBtn" disabled>
+            .TXT
+          </button>
+
+          <button type="button" class="btn btn-sm" id="downloadSrtBtn" disabled>
+            .SRT
+          </button>
+
+          <button type="button" class="btn btn-sky btn-sm" id="generateSeoBtn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            YouTube SEO Kit
+          </button>
+        </div>
+
+        <!-- Quick AI Rewrite Toolbar -->
+        <div class="rewrite-bar">
+          <span class="rewrite-label">AI Quick Rewrite:</span>
+          <button type="button" class="btn btn-sm rewrite-action" data-action="hook" disabled>হুক আরও শক্তিশালী করুন</button>
+          <button type="button" class="btn btn-sm rewrite-action" data-action="dramatic" disabled>আরও নাটকীয় করুন</button>
+          <button type="button" class="btn btn-sm rewrite-action" data-action="expand" disabled>বিস্তারিত করুন</button>
+          <button type="button" class="btn btn-sm rewrite-action" data-action="concise" disabled>সংক্ষিপ্ত করুন</button>
+        </div>
+
+        <!-- Formatted Viewer & Inline Editor -->
+        <div id="scriptViewer" class="script-viewer">
+          <div class="empty-state" id="emptyState">
+            <div class="empty-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              </svg>
+            </div>
+            <h3 style="font-size: 1.05rem; color: var(--text-main); margin-bottom: 6px;">আপনার বাংলা ভয়েস-ওভার স্ক্রিপ্ট এখানে তৈরি হবে</h3>
+            <p style="font-size: 0.84rem; max-width: 440px;">
+              বাম পাশ থেকে ভিডিও/অডিও আপলোড করুন অথবা <strong>Plot / SRT Subtitle</strong> ট্যাবে গিয়ে <strong>Load Sample Plot</strong> চেপে সরাসরি বাংলাদেশের মুভি এক্সপ্লেনেশন স্টাইলে স্ক্রিপ্ট জেনারেট করুন।
+            </p>
+          </div>
+          <div id="formattedScriptOutput" class="hidden"></div>
+        </div>
+
+        <textarea id="inlineScriptEditor" rows="20" class="hidden" style="font-size: 0.96rem; line-height: 1.8;"></textarea>
+      </section>
+
+      <!-- YouTube SEO & Packaging Kit Card -->
+      <section class="card hidden" id="seoKitCard">
+        <div class="card-header">
+          <h2 class="card-title">
+            <span class="step-badge">SEO</span>
+            YouTube Packaging &amp; SEO Kit (ভাইরাল টাইটেল, থাম্বনেইল ও ট্যাগ)
+          </h2>
+          <button type="button" class="btn btn-sm" id="closeSeoCardBtn">Hide</button>
+        </div>
+
+        <div class="seo-grid">
+          <div class="seo-box">
+            <h4>
+              <span>৫টি ভাইরাল ইউটিউব টাইটেল</span>
+              <button type="button" class="btn btn-sm" data-copy-target="seoTitlesList" style="padding: 2px 8px; font-size: 0.72rem;">Copy</button>
+            </h4>
+            <ul class="seo-list" id="seoTitlesList"></ul>
+          </div>
+
+          <div class="seo-box">
+            <h4>
+              <span>৩টি থাম্বনেইল টেক্সট আইডিয়া</span>
+              <button type="button" class="btn btn-sm" data-copy-target="seoThumbnailsList" style="padding: 2px 8px; font-size: 0.72rem;">Copy</button>
+            </h4>
+            <ul class="seo-list" id="seoThumbnailsList"></ul>
+          </div>
+
+          <div class="seo-box">
+            <h4>
+              <span>SEO ভিডিও ডেসক্রিপশন</span>
+              <button type="button" class="btn btn-sm" data-copy-target="seoDescriptionText" style="padding: 2px 8px; font-size: 0.72rem;">Copy</button>
+            </h4>
+            <p id="seoDescriptionText" style="font-size: 0.83rem; color: var(--text-secondary); white-space: pre-wrap;"></p>
+          </div>
+
+          <div class="seo-box">
+            <h4>
+              <span>YouTube Tags (Comma-Separated)</span>
+              <button type="button" class="btn btn-sm" data-copy-target="seoTagsText" style="padding: 2px 8px; font-size: 0.72rem;">Copy</button>
+            </h4>
+            <p id="seoTagsText" style="font-size: 0.82rem; font-family: var(--font-mono); color: #7dd3fc;"></p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Modal 1: API & Multi-Provider Configuration -->
+  <div class="modal-backdrop" id="apiModalBackdrop">
+    <div class="modal" role="dialog" aria-labelledby="apiModalTitle">
+      <div class="modal-header">
+        <h3 id="apiModalTitle" style="font-size: 1.05rem;">AI Backend &amp; Multi-Provider Configuration</h3>
+        <button type="button" class="btn btn-sm" id="closeApiModalBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="backendModeSelect">Execution Mode (ইঞ্জিন মোড নির্বাচন করুন)</label>
+          <select id="backendModeSelect">
+            <option value="builtin">Mode A: Built-in Canvas Gemini Engine (কোনো API Key ছাড়াই ইন-অ্যাপ টেস্ট)</option>
+            <option value="external">Mode B: External Custom API Key (বাইরে হোস্ট বা নিজস্ব কী ব্যবহারের জন্য)</option>
+          </select>
+        </div>
+
+        <div id="builtinInfoBox" style="background: var(--emerald-soft); border: 1px solid rgba(16,185,129,0.35); border-radius: 10px; padding: 12px; font-size: 0.84rem; color: #a7f3d0; margin-bottom: 14px;">
+          <strong>Built-in Canvas Mode সক্রিয়:</strong> এই প্রিভিউ ক্যানভাসের ভেতরে কাজ করার জন্য আলাদা কোনো API Key বসানোর প্রয়োজন নেই। আপনি যখন কোডটি ডাউনলোড করে বাইরে হোস্ট করবেন, তখন উপর থেকে <em>Mode B (External Custom API Key)</em> সিলেক্ট করে যেকোনো প্রোভাইডারের কী বসাতে পারবেন।
+        </div>
+
+        <div id="externalProviderFields" class="hidden">
+          <div class="form-group">
+            <label for="providerSelect">Select AI Provider (৬টি প্রোভাইডার সাপোর্ট)</label>
+            <select id="providerSelect">
+              <option value="gemini">1. Google AI Studio (Gemini — Multimodal Video/Audio + Text)</option>
+              <option value="openai">2. OpenAI (GPT-4o / GPT-4o-mini)</option>
+              <option value="nvidia">3. NVIDIA NIM Free Tier (Llama-3.1-70B / Mistral Large 2)</option>
+              <option value="groq">4. Groq Free &amp; Fast (Llama-3.3-70B / Mixtral 8x7B)</option>
+              <option value="openrouter">5. OpenRouter Free Models (Gemini 2.0 Flash Free / Llama 3.3)</option>
+              <option value="custom">6. Custom OpenAI-Compatible Endpoint (যেকোনো কাস্টম API)</option>
+            </select>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="modelSelect">Model Selection</label>
+              <select id="modelSelect"></select>
+              <input type="text" id="customModelInput" class="hidden" placeholder="e.g. meta/llama-3.1-70b-instruct" />
+            </div>
+
+            <div class="form-group">
+              <label for="apiKeyInput">API Key</label>
+              <input type="password" id="apiKeyInput" placeholder="AIza... / sk-... / nvapi-... / gsk_..." />
+            </div>
+          </div>
+
+          <div class="form-group" id="customEndpointGroup">
+            <label for="baseUrlInput">API Endpoint URL</label>
+            <input type="text" id="baseUrlInput" placeholder="https://..." />
+          </div>
+
+          <div id="providerMultimodalNote" style="font-size: 0.78rem; color: var(--amber); background: var(--amber-soft); padding: 9px 12px; border-radius: 8px; border: 1px solid rgba(245,158,11,0.3);">
+            দ্রষ্টব্য: সরাসরি বড় ভিডিও/অডিও ফাইল অ্যানালাইসিসের জন্য Google Gemini (অথবা Built-in Canvas Mode) ব্যবহার করুন। OpenAI, NVIDIA, Groq ও OpenRouter-এ Plot / SRT Subtitle ট্যাব ব্যবহার করুন।
+          </div>
+        </div>
+
+        <div id="connectionTestResult" class="hidden" style="margin-top: 12px; padding: 10px 12px; border-radius: 8px; font-size: 0.83rem;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sky" id="testConnectionBtn">Test Connection</button>
+        <button type="button" class="btn btn-primary" id="saveApiSettingsBtn">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: System Prompt Editor -->
+  <div class="modal-backdrop" id="promptModalBackdrop">
+    <div class="modal" role="dialog" aria-labelledby="promptModalTitle">
+      <div class="modal-header">
+        <h3 id="promptModalTitle" style="font-size: 1.05rem;">Backend AI System Prompt Configuration</h3>
+        <button type="button" class="btn btn-sm" id="closePromptModalBtn">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 10px;">
+          এই সিস্টেম প্রম্পটটি AI-কে বাংলাদেশের মুভি এক্সপ্লেনেশন ও অ্যানিমে রিক্যাপ চ্যানেলের উপযোগী প্রাঞ্জল বাংলা ভয়েস-ওভার স্ক্রিপ্ট তৈরির নির্দেশনা দেয়:
+        </p>
+        <textarea id="systemPromptTextarea" rows="15" style="font-family: var(--font-mono); font-size: 0.8rem;"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" id="resetPromptBtn">Reset to Default</button>
+        <button type="button" class="btn btn-primary" id="savePromptBtn">Save System Prompt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Saved Script History -->
+  <div class="modal-backdrop" id="historyModalBackdrop">
+    <div class="modal" role="dialog" aria-labelledby="historyModalTitle">
+      <div class="modal-header">
+        <h3 id="historyModalTitle" style="font-size: 1.05rem;">সংরক্ষিত স্ক্রিপ্ট আর্কাইভ (Script History)</h3>
+        <button type="button" class="btn btn-sm" id="closeHistoryModalBtn">✕</button>
+      </div>
+      <div class="modal-body" id="historyListContainer"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-rose btn-sm" id="clearAllHistoryBtn">Clear All History</button>
+        <button type="button" class="btn" id="closeHistoryFooterBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Teleprompter + Voice-Over Recorder -->
+  <div class="teleprompter-overlay" id="teleprompterOverlay" role="dialog" aria-label="Teleprompter and Voice Booth">
+    <div class="tp-topbar">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <strong style="color: var(--amber); font-size: 0.95rem;">Bangla VO Teleprompter &amp; Voice Booth</strong>
+      </div>
+
+      <div class="tp-controls">
+        <button type="button" class="btn btn-emerald btn-sm" id="tpPlayPauseBtn">▶ Start Scroll</button>
+        <button type="button" class="btn btn-sm" id="tpResetScrollBtn">↺ Top</button>
+        <button type="button" class="btn btn-sm" id="tpMirrorBtn">⇄ Mirror</button>
+
+        <div class="tp-slider-group">
+          <span>Font: <strong id="tpFontVal">34px</strong></span>
+          <input type="range" id="tpFontSlider" min="20" max="60" value="34" />
+        </div>
+
+        <div class="tp-slider-group">
+          <span>Speed: <strong id="tpSpeedVal">2.0x</strong></span>
+          <input type="range" id="tpSpeedSlider" min="0.5" max="8" step="0.5" value="2" />
+        </div>
+
+        <button type="button" class="btn btn-rose btn-sm" id="closeTeleprompterBtn">✕ Exit</button>
+      </div>
+    </div>
+
+    <div class="tp-guide-line" aria-hidden="true"></div>
+    <div class="tp-stage" id="tpStage">
+      <div class="tp-text" id="tpTextDisplay"></div>
+    </div>
+
+    <!-- Built-in Microphone Voice Recorder Dock -->
+    <div class="tp-recorder-dock">
+      <button type="button" class="btn btn-rose" id="startRecBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="7"></circle>
+        </svg>
+        Record Voice-Over
+      </button>
+      <button type="button" class="btn" id="stopRecBtn" disabled>■ Stop</button>
+      <span class="rec-timer" id="recTimer">00:00</span>
+      <audio id="recordedAudioPlayer" controls class="hidden" style="max-width: 280px; height: 36px;"></audio>
+      <a id="downloadAudioLink" class="btn btn-emerald btn-sm hidden" download="bangla_voiceover_recording.webm">Download Audio</a>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Canvas runtime injects key into empty string if needed; also detect window.gemini if exposed
+      const apiKey = "";
+
+      const DEFAULT_SYSTEM_PROMPT = `Act as an expert AI video analysis and scriptwriting engine specialized in extracting narrative content from long-form videos and synthesizing it into engaging, localized voice-over scripts.
+
+Input Specifications:
+* Media Ingestion: Process video files up to large capacities (supporting formats like MP4, WebM, MOV, MKV, WAV, MP3, etc.).
+* Parameter Configuration: Accept source language identification and target output language.
+* Director Directives: Incorporate specific stylistic instructions regarding pacing, tone, emotion, and targeted vocabulary.
+
+Processing Protocol:
+* Multimodal Analysis: Simultaneously analyze both visual cues and audio tracks to understand narrative flow, key action points, and emotional beats.
+* Narrative Adaptation: Translate and adapt the content rather than performing a literal translation. Structure the narrative specifically for Bangladeshi movie explanation and anime recap channels, utilizing conversational, engaging, and dramatic storytelling techniques in Bangla.
+* Script Formatting: Deliver the final output structured for voice-over recording, highlighting major structural beats such as [00:00 - HOOK], [STORY SETUP], [RISING ACTION], [CLIMAX TWIST], [OUTRO], and vocal delivery cues like [PAUSE], [TONE: ...], and [SFX: ...].
+
+Output Requirements:
+Format the generated script exclusively in natural, expressive Bangla (বাংলা), ensuring compelling phrasing, appropriate tone adjustments based on genre, and smooth timing for voice-over delivery.`;
+
+      const TONE_TAGS = [
+        'সাসপেন্স ও টানটান উত্তেজনা',
+        'হুক-ভিত্তিক শুরু',
+        'সহজ ও সাবলীল বাংলা',
+        'আবেগঘন ও হৃদয়স্পর্শী',
+        'রহস্যময় টুইস্ট',
+        'গা ছমছমে ভৌতিক আবহ',
+        'টানটান অ্যাকশন ও প্রতিশোধ',
+        'চমকপ্রদ ক্লাইম্যাক্স টুইস্ট',
+        'ডার্ক ও সিরিয়াস মেজাজ',
+        'হাস্যরস ও ব্যঙ্গাত্মক',
+        'দর্শককে প্রশ্ন ছুঁড়ে দেওয়া',
+        'সিনেমাটিক ভিজ্যুয়াল বর্ণনা',
+        'চরিত্রের মনস্তাত্ত্বিক বিশ্লেষণ',
+        'সহজ কথ্য ঢাকাইয়া টান',
+        'শুদ্ধ ও সাহিত্যিক বাংলা',
+        'নস্টালজিক ও স্মৃতিকাতর'
+      ];
+
+      const PROVIDERS = {
+        gemini: {
+          name: 'Google AI Studio (Gemini)',
+          endpoint: 'https://generativelanguage.googleapis.com/v1beta',
+          models: ['gemini-3-flash-preview', 'gemini-3.8-flash', 'gemini-3.8-pro'],
+          multimodal: true
+        },
+        openai: {
+          name: 'OpenAI',
+          endpoint: 'https://api.openai.com/v1/chat/completions',
+          models: ['gpt-4o', 'gpt-4o-mini'],
+          multimodal: false
+        },
+        nvidia: {
+          name: 'NVIDIA NIM Free Tier',
+          endpoint: 'https://integrate.api.nvidia.com/v1/chat/completions',
+          models: ['meta/llama-3.1-70b-instruct', 'mistralai/mistral-large-2-instruct'],
+          multimodal: false
+        },
+        groq: {
+          name: 'Groq Free & Fast',
+          endpoint: 'https://api.groq.com/openai/v1/chat/completions',
+          models: ['llama-3.3-70b-versatile', 'mixtral-8x7b-32768'],
+          multimodal: false
+        },
+        openrouter: {
+          name: 'OpenRouter Free Models',
+          endpoint: 'https://openrouter.ai/api/v1/chat/completions',
+          models: ['google/gemini-2.0-flash-exp:free', 'meta-llama/llama-3.3-70b-instruct:free'],
+          multimodal: false
+        },
+        custom: {
+          name: 'Custom OpenAI-Compatible Endpoint',
+          endpoint: 'https://api.example.com/v1/chat/completions',
+          models: [],
+          multimodal: false
+        }
+      };
+
+      const SAMPLE_PLOT = `Movie Title: The Midnight Frequency (Sci-Fi Mystery Thriller)
+[00:00 - 01:20] In an isolated weather observatory high in the Himalayas, radio engineer Rian picks up an encrypted Morse code transmission repeating every 13 minutes. Surprisingly, the signal isn't coming from space—it is broadcasting from 500 meters beneath the frozen glacier directly below their station.
+[01:20 - 03:40] When Rian reports this to station commander Elena, she abruptly orders him to delete all logs and never mention it again. Later that night, a violent blizzard cuts off all external satellite communications, trapping the five-member crew inside.
+[03:40 - 06:10] Curious and suspicious, Rian sneaks into the restricted sub-basement and discovers an abandoned 1978 Soviet drilling shaft. Inside, he finds a frost-covered cassette tape with his own voice recorded on it, warning: "Whatever knocks on the blast door tonight, do not let it inside—it wears our faces."
+[06:10 - 08:30] Suddenly, alarms blare across the station. Through the reinforced glass of the airlock, Elena bangs frantically begging to be let in from the freezing storm—while at the exact same moment, Elena walks down the corridor behind Rian holding a flare gun!`;
+
+      // Safe localStorage Helpers
+      function storageGet(key, fallback) {
+        try {
+          const val = window.localStorage.getItem(key);
+          return val !== null ? val : fallback;
+        } catch (e) {
+          return fallback;
+        }
+      }
+
+      function storageSet(key, val) {
+        try {
+          window.localStorage.setItem(key, val);
+        } catch (e) { /* ignore sandbox storage restrictions */ }
+      }
+
+      // Application State
+      const state = {
+        backendMode: storageGet('bnsp_mode', 'builtin'), // 'builtin' | 'external'
+        provider: storageGet('bnsp_provider', 'gemini'),
+        model: storageGet('bnsp_model', 'gemini-3-flash-preview'),
+        apiKeys: JSON.parse(storageGet('bnsp_keys', '{}')),
+        customEndpoints: JSON.parse(storageGet('bnsp_endpoints', '{}')),
+        systemPrompt: storageGet('bnsp_sys_prompt', DEFAULT_SYSTEM_PROMPT),
+        selectedTags: new Set(['সাসপেন্স ও টানটান উত্তেজনা', 'হুক-ভিত্তিক শুরু', 'সহজ ও সাবলীল বাংলা']),
+        activeInputTab: 'media',
+        selectedFile: null,
+        selectedFileUrl: null,
+        currentScript: '',
+        isEditMode: false,
+        history: JSON.parse(storageGet('bnsp_history', '[]')),
+        // Teleprompter & Recorder state
+        tpScrolling: false,
+        tpRafId: null,
+        tpLastTime: 0,
+        tpMirrored: false,
+        mediaRecorder: null,
+        audioChunks: [],
+        recInterval: null,
+        recSeconds: 0
+      };
+
+      // DOM Elements Cache
+      const el = {
+        engineStatusPill: document.getElementById('engineStatusPill'),
+        engineStatusText: document.getElementById('engineStatusText'),
+        openApiModalBtn: document.getElementById('openApiModalBtn'),
+        openPromptModalBtn: document.getElementById('openPromptModalBtn'),
+        openHistoryModalBtn: document.getElementById('openHistoryModalBtn'),
+        historyCountBadge: document.getElementById('historyCountBadge'),
+
+        tabMediaBtn: document.getElementById('tabMediaBtn'),
+        tabTextBtn: document.getElementById('tabTextBtn'),
+        mediaTabPane: document.getElementById('mediaTabPane'),
+        textTabPane: document.getElementById('textTabPane'),
+        ingestionModeHint: document.getElementById('ingestionModeHint'),
+
+        dropzone: document.getElementById('dropzone'),
+        mediaFileInput: document.getElementById('mediaFileInput'),
+        filePreviewContainer: document.getElementById('filePreviewContainer'),
+        fileNameDisplay: document.getElementById('fileNameDisplay'),
+        fileMetaDisplay: document.getElementById('fileMetaDisplay'),
+        removeFileBtn: document.getElementById('removeFileBtn'),
+        videoPreview: document.getElementById('videoPreview'),
+        audioPreview: document.getElementById('audioPreview'),
+
+        uploadSrtBtn: document.getElementById('uploadSrtBtn'),
+        srtFileInput: document.getElementById('srtFileInput'),
+        loadSamplePlotBtn: document.getElementById('loadSamplePlotBtn'),
+        plotTextarea: document.getElementById('plotTextarea'),
+
+        resetDirectivesBtn: document.getElementById('resetDirectivesBtn'),
+        sourceLangSelect: document.getElementById('sourceLangSelect'),
+        targetStyleSelect: document.getElementById('targetStyleSelect'),
+        genreSelect: document.getElementById('genreSelect'),
+        pacingSelect: document.getElementById('pacingSelect'),
+        lengthSelect: document.getElementById('lengthSelect'),
+        perspectiveSelect: document.getElementById('perspectiveSelect'),
+        toneTagsContainer: document.getElementById('toneTagsContainer'),
+        selectedTagsCount: document.getElementById('selectedTagsCount'),
+        directorNotesInput: document.getElementById('directorNotesInput'),
+
+        generateScriptBtn: document.getElementById('generateScriptBtn'),
+        progressBox: document.getElementById('progressBox'),
+        progressLabel: document.getElementById('progressLabel'),
+        progressPercent: document.getElementById('progressPercent'),
+        progressFill: document.getElementById('progressFill'),
+
+        statWords: document.getElementById('statWords'),
+        statDuration: document.getElementById('statDuration'),
+        statBeats: document.getElementById('statBeats'),
+
+        openTeleprompterBtn: document.getElementById('openTeleprompterBtn'),
+        toggleEditModeBtn: document.getElementById('toggleEditModeBtn'),
+        copyFullBtn: document.getElementById('copyFullBtn'),
+        copyCleanBtn: document.getElementById('copyCleanBtn'),
+        downloadTxtBtn: document.getElementById('downloadTxtBtn'),
+        downloadSrtBtn: document.getElementById('downloadSrtBtn'),
+        generateSeoBtn: document.getElementById('generateSeoBtn'),
+
+        scriptViewer: document.getElementById('scriptViewer'),
+        emptyState: document.getElementById('emptyState'),
+        formattedScriptOutput: document.getElementById('formattedScriptOutput'),
+        inlineScriptEditor: document.getElementById('inlineScriptEditor'),
+
+        seoKitCard: document.getElementById('seoKitCard'),
+        closeSeoCardBtn: document.getElementById('closeSeoCardBtn'),
+        seoTitlesList: document.getElementById('seoTitlesList'),
+        seoThumbnailsList: document.getElementById('seoThumbnailsList'),
+        seoDescriptionText: document.getElementById('seoDescriptionText'),
+        seoTagsText: document.getElementById('seoTagsText'),
+
+        // API Modal
+        apiModalBackdrop: document.getElementById('apiModalBackdrop'),
+        closeApiModalBtn: document.getElementById('closeApiModalBtn'),
+        backendModeSelect: document.getElementById('backendModeSelect'),
+        builtinInfoBox: document.getElementById('builtinInfoBox'),
+        externalProviderFields: document.getElementById('externalProviderFields'),
+        providerSelect: document.getElementById('providerSelect'),
+        modelSelect: document.getElementById('modelSelect'),
+        customModelInput: document.getElementById('customModelInput'),
+        apiKeyInput: document.getElementById('apiKeyInput'),
+        customEndpointGroup: document.getElementById('customEndpointGroup'),
+        baseUrlInput: document.getElementById('baseUrlInput'),
+        connectionTestResult: document.getElementById('connectionTestResult'),
+        testConnectionBtn: document.getElementById('testConnectionBtn'),
+        saveApiSettingsBtn: document.getElementById('saveApiSettingsBtn'),
+
+        // Prompt Modal
+        promptModalBackdrop: document.getElementById('promptModalBackdrop'),
+        closePromptModalBtn: document.getElementById('closePromptModalBtn'),
+        systemPromptTextarea: document.getElementById('systemPromptTextarea'),
+        resetPromptBtn: document.getElementById('resetPromptBtn'),
+        savePromptBtn: document.getElementById('savePromptBtn'),
+
+        // History Modal
+        historyModalBackdrop: document.getElementById('historyModalBackdrop'),
+        closeHistoryModalBtn: document.getElementById('closeHistoryModalBtn'),
+        closeHistoryFooterBtn: document.getElementById('closeHistoryFooterBtn'),
+        historyListContainer: document.getElementById('historyListContainer'),
+        clearAllHistoryBtn: document.getElementById('clearAllHistoryBtn'),
+
+        // Teleprompter & Recorder
+        teleprompterOverlay: document.getElementById('teleprompterOverlay'),
+        tpPlayPauseBtn: document.getElementById('tpPlayPauseBtn'),
+        tpResetScrollBtn: document.getElementById('tpResetScrollBtn'),
+        tpMirrorBtn: document.getElementById('tpMirrorBtn'),
+        tpFontSlider: document.getElementById('tpFontSlider'),
+        tpFontVal: document.getElementById('tpFontVal'),
+        tpSpeedSlider: document.getElementById('tpSpeedSlider'),
+        tpSpeedVal: document.getElementById('tpSpeedVal'),
+        closeTeleprompterBtn: document.getElementById('closeTeleprompterBtn'),
+        tpStage: document.getElementById('tpStage'),
+        tpTextDisplay: document.getElementById('tpTextDisplay'),
+        startRecBtn: document.getElementById('startRecBtn'),
+        stopRecBtn: document.getElementById('stopRecBtn'),
+        recTimer: document.getElementById('recTimer'),
+        recordedAudioPlayer: document.getElementById('recordedAudioPlayer'),
+        downloadAudioLink: document.getElementById('downloadAudioLink'),
+
+        toastContainer: document.getElementById('toastContainer')
+      };
+
+      // Toast Notification Utility
+      function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.textContent = message;
+        el.toastContainer.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transition = 'opacity 0.25s ease';
+          setTimeout(() => toast.remove(), 260);
+        }, 4200);
+      }
+
+      // Clipboard Copy Utility (sandbox-safe)
+      function copyTextToClipboard(text, successMsg = 'ক্লিপবোর্ডে কপি করা হয়েছে!') {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast(successMsg, 'success');
+        } catch (err) {
+          showToast('কপি করতে সমস্যা হয়েছে, ম্যানুয়ালি কপি করুন।', 'error');
+        } finally {
+          ta.remove();
+        }
+      }
+
+      // Exponential Backoff Fetch Helper
+      async function fetchWithBackoff(url, options, maxRetries = 3) {
+        let delay = 1000;
+        for (let attempt = 0; attempt <= maxRetries; attempt++) {
+          const response = await fetch(url, options);
+          if (response.status === 429 && attempt < maxRetries) {
+            await new Promise((res) => setTimeout(res, delay));
+            delay *= 2;
+            continue;
+          }
+          return response;
+        }
+      }
+
+      // Render 16 Interactive Tone & Vocabulary Tags
+      function renderToneTags() {
+        el.toneTagsContainer.innerHTML = '';
+        TONE_TAGS.forEach((tag) => {
+          const pill = document.createElement('button');
+          pill.type = 'button';
+          pill.className = 'tag-pill' + (state.selectedTags.has(tag) ? ' selected' : '');
+          pill.textContent = tag;
+          pill.addEventListener('click', () => {
+            if (state.selectedTags.has(tag)) {
+              state.selectedTags.delete(tag);
+              pill.classList.remove('selected');
+            } else {
+              state.selectedTags.add(tag);
+              pill.classList.add('selected');
+            }
+            el.selectedTagsCount.textContent = `${state.selectedTags.size} selected`;
+          });
+          el.toneTagsContainer.appendChild(pill);
+        });
+        el.selectedTagsCount.textContent = `${state.selectedTags.size} selected`;
+      }
+
+      // Update Header Engine Status Pill
+      function updateEngineStatusUI() {
+        if (state.backendMode === 'builtin') {
+          el.engineStatusPill.className = 'status-pill';
+          el.engineStatusText.textContent = 'Built-in Canvas Gemini Engine';
+          el.ingestionModeHint.textContent = 'Multimodal Video/Audio + Text Ready';
+        } else {
+          const prov = PROVIDERS[state.provider];
+          const key = (state.apiKeys[state.provider] || '').trim();
+          if (key) {
+            el.engineStatusPill.className = 'status-pill';
+            el.engineStatusText.textContent = `${prov.name} (${state.model})`;
+          } else {
+            el.engineStatusPill.className = 'status-pill warning';
+            el.engineStatusText.textContent = `${prov.name} — API Key প্রয়োজন`;
+          }
+          el.ingestionModeHint.textContent = prov.multimodal
+            ? 'Multimodal Video/Audio + Text Ready'
+            : 'Text / SRT Mode (Video শুধু Gemini-তে)';
+        }
+      }
+
+      // Sync API Modal Fields
+      function syncApiModalFields() {
+        const mode = el.backendModeSelect.value;
+        if (mode === 'builtin') {
+          el.builtinInfoBox.classList.remove('hidden');
+          el.externalProviderFields.classList.add('hidden');
+        } else {
+          el.builtinInfoBox.classList.add('hidden');
+          el.externalProviderFields.classList.remove('hidden');
+
+          const provKey = el.providerSelect.value;
+          const prov = PROVIDERS[provKey];
+
+          el.modelSelect.innerHTML = '';
+          if (provKey === 'custom') {
+            el.modelSelect.classList.add('hidden');
+            el.customModelInput.classList.remove('hidden');
+            el.customModelInput.value = state.model || '';
+          } else {
+            el.modelSelect.classList.remove('hidden');
+            el.customModelInput.classList.add('hidden');
+            prov.models.forEach((m) => {
+              const opt = document.createElement('option');
+              opt.value = m;
+              opt.textContent = m;
+              el.modelSelect.appendChild(opt);
+            });
+            if (prov.models.includes(state.model)) {
+              el.modelSelect.value = state.model;
+            }
+          }
+
+          el.apiKeyInput.value = state.apiKeys[provKey] || '';
+          el.baseUrlInput.value = state.customEndpoints[provKey] || prov.endpoint;
+        }
+      }
+
+      // Progress Bar Controller
+      function setProgress(visible, label = '', percent = 0) {
+        if (!visible) {
+          el.progressBox.classList.add('hidden');
+          return;
+        }
+        el.progressBox.classList.remove('hidden');
+        el.progressLabel.textContent = label;
+        el.progressPercent.textContent = `${Math.round(percent)}%`;
+        el.progressFill.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+      }
+
+      // Read File as Base64
+      function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            const result = reader.result || '';
+            const base64 = result.split(',')[1];
+            resolve(base64);
+          };
+          reader.onerror = () => reject(new Error('ফাইল রিড করতে সমস্যা হয়েছে।'));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      // Gemini Resumable File API Upload for Large Media (>15MB)
+      async function uploadLargeMediaToGemini(file, effectiveKey) {
+        const mimeType = file.type || 'video/mp4';
+        setProgress(true, 'Gemini File API সেশন শুরু হচ্ছে...', 8);
+
+        const startRes = await fetchWithBackoff(
+          `https://generativelanguage.googleapis.com/upload/v1beta/files?key=${encodeURIComponent(effectiveKey)}`,
+          {
+            method: 'POST',
+            headers: {
+              'X-Goog-Upload-Protocol': 'resumable',
+              'X-Goog-Upload-Command': 'start',
+              'X-Goog-Upload-Header-Content-Length': String(file.size),
+              'X-Goog-Upload-Header-Content-Type': mimeType,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ file: { display_name: file.name } })
+          }
+        );
+
+        if (!startRes.ok) {
+          const errTxt = await startRes.text();
+          throw new Error(`ফাইল আপলোড শুরু ব্যর্থ (${startRes.status}): ${errTxt}`);
+        }
+
+        const uploadUrl = startRes.headers.get('X-Goog-Upload-URL');
+        if (!uploadUrl) {
+          throw new Error('Gemini সার্ভার থেকে আপলোড URL পাওয়া যায়নি।');
+        }
+
+        // Upload bytes via XHR for live progress
+        const uploadedFileObj = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', uploadUrl, true);
+          xhr.setRequestHeader('X-Goog-Upload-Offset', '0');
+          xhr.setRequestHeader('X-Goog-Upload-Command', 'upload, finalize');
+
+          xhr.upload.onprogress = (evt) => {
+            if (evt.lengthComputable) {
+              const pct = 10 + (evt.loaded / evt.total) * 50;
+              setProgress(true, `মিডিয়া আপলোড হচ্ছে (${(evt.loaded / (1024 * 1024)).toFixed(1)} MB)...`, pct);
+            }
+          };
+
+          xhr.onload = () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              try {
+                const parsed = JSON.parse(xhr.responseText);
+                resolve(parsed.file);
+              } catch (e) {
+                reject(new Error('আপলোড রেসপন্স পার্স করা যায়নি।'));
+              }
+            } else {
+              reject(new Error(`আপলোড ব্যর্থ (${xhr.status}): ${xhr.responseText}`));
+            }
+          };
+
+          xhr.onerror = () => reject(new Error('নেটওয়ার্ক ত্রুটির কারণে আপলোড বিচ্ছিন্ন হয়েছে।'));
+          xhr.send(file);
+        });
+
+        // Poll until state === ACTIVE
+        let fileInfo = uploadedFileObj;
+        let attempts = 0;
+        while (fileInfo && fileInfo.state === 'PROCESSING' && attempts < 60) {
+          attempts++;
+          setProgress(true, 'ভিডিও ও অডিও ট্র্যাক প্রসেসিং হচ্ছে...', Math.min(82, 60 + attempts));
+          await new Promise((r) => setTimeout(r, 3000));
+          const pollRes = await fetchWithBackoff(
+            `https://generativelanguage.googleapis.com/v1beta/${fileInfo.name}?key=${encodeURIComponent(effectiveKey)}`,
+            { method: 'GET' }
+          );
+          if (!pollRes.ok) throw new Error(`ফাইল স্ট্যাটাস চেক ব্যর্থ (${pollRes.status})`);
+          fileInfo = await pollRes.json();
+        }
+
+        if (!fileInfo || fileInfo.state !== 'ACTIVE') {
+          throw new Error('ভিডিও ফাইলটি প্রসেস হতে পারেনি। অনুগ্রহ করে ছোট ক্লিপ বা SRT সাবটাইটেল দিয়ে চেষ্টা করুন।');
+        }
+
+        return fileInfo;
+      }
+
+      // Unified AI Execution Layer (Supports Built-in Canvas Engine + 6 External Providers)
+      async function runAIGeneration({ userPrompt, mediaFile = null, jsonMode = false }) {
+        const isBuiltin = state.backendMode === 'builtin';
+        const activeProvider = isBuiltin ? 'gemini' : state.provider;
+        const effectiveKey = isBuiltin ? apiKey : (state.apiKeys[activeProvider] || '').trim();
+
+        if (!isBuiltin && !effectiveKey) {
+          throw new Error(`${PROVIDERS[activeProvider].name}-এর জন্য API Key প্রদান করুন অথবা Built-in Canvas Engine সিলেক্ট করুন।`);
+        }
+
+        if (mediaFile && !PROVIDERS[activeProvider].multimodal) {
+          throw new Error(`${PROVIDERS[activeProvider].name} সরাসরি ভিডিও/অডিও ফাইল সাপোর্ট করে না। ভিডিওর জন্য Built-in Canvas Engine বা Google Gemini সিলেক্ট করুন, অথবা Plot / SRT Subtitle ট্যাব ব্যবহার করুন।`);
+        }
+
+        // 1) Google Gemini (Built-in Canvas or External Google AI Studio)
+        if (activeProvider === 'gemini') {
+          // If canvas exposes window.gemini native helper and no binary file is needed, support it seamlessly
+          if (isBuiltin && !mediaFile && window.gemini && typeof window.gemini.generateText === 'function') {
+            setProgress(true, 'Built-in Canvas Gemini ইঞ্জিনে স্ক্রিপ্ট তৈরি হচ্ছে...', 65);
+            const combined = `${state.systemPrompt}\n\n---\n\n${userPrompt}`;
+            const res = await window.gemini.generateText(combined);
+            if (typeof res === 'string' && res.trim()) return res.trim();
+          }
+
+          const parts = [{ text: userPrompt }];
+
+          if (mediaFile) {
+            const fifteenMB = 15 * 1024 * 1024;
+            if (mediaFile.size <= fifteenMB) {
+              setProgress(true, 'মিডিয়া ফাইল এনকোড করা হচ্ছে...', 35);
+              const b64 = await fileToBase64(mediaFile);
+              parts.unshift({
+                inlineData: {
+                  mimeType: mediaFile.type || 'video/mp4',
+                  data: b64
+                }
+              });
+            } else {
+              const fileInfo = await uploadLargeMediaToGemini(mediaFile, effectiveKey);
+              parts.unshift({
+                fileData: {
+                  mimeType: fileInfo.mimeType || mediaFile.type || 'video/mp4',
+                  fileUri: fileInfo.uri
+                }
+              });
+            }
+          }
+
+          setProgress(true, 'বাংলা ভয়েস-ওভার ন্যারেটিভ তৈরি হচ্ছে...', 85);
+
+          // Model resolution with automatic fallback for deprecated/preview aliases
+          const candidateModels = isBuiltin
+            ? ['gemini-3-flash-preview', 'gemini-2.5-flash']
+            : [state.model, 'gemini-3-flash-preview'];
+
+          let lastError = null;
+          for (const modelName of candidateModels) {
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${encodeURIComponent(effectiveKey)}`;
+            const payload = {
+              systemInstruction: {
+                parts: [{ text: state.systemPrompt }]
+              },
+              contents: [{ role: 'user', parts }],
+              generationConfig: {
+                temperature: 0.75
+              }
+            };
+
+            if (jsonMode) {
+              payload.generationConfig.responseMimeType = 'application/json';
+            }
+
+            const response = await fetchWithBackoff(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              const text = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || '').join('') || '';
+              if (!text.trim()) throw new Error('মডেল থেকে খালি রেসপন্স এসেছে।');
+              return text.trim();
+            } else {
+              const errBody = await response.json().catch(() => ({}));
+              const msg = errBody?.error?.message || `HTTP ${response.status}`;
+              lastError = new Error(msg);
+              // Retry next candidate model if 404/400 model-not-found
+              if (response.status !== 404 && response.status !== 400) {
+                break;
+              }
+            }
+          }
+          throw lastError || new Error('Gemini API কল ব্যর্থ হয়েছে।');
+        }
+
+        // 2) OpenAI-Compatible Providers (OpenAI, NVIDIA NIM, Groq, OpenRouter, Custom)
+        setProgress(true, `${PROVIDERS[activeProvider].name} থেকে স্ক্রিপ্ট জেনারেট হচ্ছে...`, 65);
+        const endpointUrl = (state.customEndpoints[activeProvider] || PROVIDERS[activeProvider].endpoint).trim();
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${effectiveKey}`
+        };
+
+        if (activeProvider === 'openrouter') {
+          headers['HTTP-Referer'] = window.location.origin || 'https://bangla-narrative-studio.local';
+          headers['X-Title'] = 'Bangla Narrative Studio Pro';
+        }
+
+        const bodyObj = {
+          model: state.model,
+          messages: [
+            { role: 'system', content: state.systemPrompt },
+            { role: 'user', content: userPrompt }
+          ],
+          temperature: 0.75
+        };
+
+        const response = await fetchWithBackoff(endpointUrl, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify(bodyObj)
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          const errMsg = errData?.error?.message || errData?.detail || `HTTP ${response.status}`;
+          throw new Error(`${PROVIDERS[activeProvider].name} এরর: ${errMsg}`);
+        }
+
+        const data = await response.json();
+        const content = data?.choices?.[0]?.message?.content || '';
+        if (!content.trim()) {
+          throw new Error('AI প্রোভাইডার থেকে কোনো আউটপুট পাওয়া যায়নি।');
+        }
+        return content.trim();
+      }
+
+      // Build Director Prompt from Form Controls
+      function buildDirectorUserPrompt(rawSourceText = '') {
+        const tonesList = Array.from(state.selectedTags).join(', ') || 'সাসপেন্স ও টানটান উত্তেজনা, সহজ ও সাবলীল বাংলা';
+        const notes = el.directorNotesInput.value.trim();
+
+        let prompt = `=== DIRECTOR DIRECTIVES & LOCALIZATION PARAMETERS ===
+- Source Language: ${el.sourceLangSelect.value}
+- Target Output Style: ${el.targetStyleSelect.value}
+- Genre Preset: ${el.genreSelect.value}
+- Narration Pacing: ${el.pacingSelect.value}
+- Target Script Length: ${el.lengthSelect.value}
+- Narrative Perspective: ${el.perspectiveSelect.value}
+- Emotional Tone & Vocabulary Tags: ${tonesList}
+${notes ? `- Custom Director Notes: ${notes}` : ''}
+
+=== SCRIPT STRUCTURE & FORMATTING RULES ===
+1. Write the ENTIRE voice-over script exclusively in natural, engaging, dramatic Bangla (বাংলা) tailored for Bangladeshi YouTube movie explanation / anime recap audiences.
+2. Start with a high-retention opening hook labeled [00:00 - HOOK].
+3. Break the narrative into clear structural beats with timestamps like [00:45 - STORY SETUP], [02:15 - RISING ACTION], [05:30 - CLIMAX TWIST], [07:45 - OUTRO].
+4. Embed clear voice-artist delivery cues inline: [PAUSE], [TONE: Suspenseful / Emotional / Excited / Dark], and [SFX: ...].
+5. Do NOT include any English intro/outro chatter—output ONLY the ready-to-record Bangla script.`;
+
+        if (rawSourceText) {
+          prompt += `\n\n=== SOURCE STORY / TRANSCRIPT / SUBTITLES ===\n${rawSourceText}`;
+        }
+
+        return prompt;
+      }
+
+      // Escape HTML safely
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      // Format & Render Generated Script with Styled Cue Badges
+      function renderScriptOutput(scriptText) {
+        state.currentScript = scriptText;
+        state.isEditMode = false;
+        el.inlineScriptEditor.classList.add('hidden');
+        el.scriptViewer.classList.remove('hidden');
+        el.toggleEditModeBtn.textContent = 'Edit Script';
+
+        // Calculate stats
+        const cleanForCount = scriptText.replace(/\[[^\]]+\]/g, ' ').trim();
+        const words = cleanForCount ? cleanForCount.split(/\s+/).length : 0;
+        const totalSec = Math.round((words / 130) * 60);
+        const mins = String(Math.floor(totalSec / 60)).padStart(2, '0');
+        const secs = String(totalSec % 60).padStart(2, '0');
+
+        const beatMatches = scriptText.match(/\[(\d{1,2}:\d{2}|HOOK|STORY SETUP|RISING ACTION|CLIMAX|OUTRO|SCENE)[^\]]*\]/gi) || [];
+
+        el.statWords.textContent = words;
+        el.statDuration.textContent = `${mins}:${secs}`;
+        el.statBeats.textContent = beatMatches.length;
+
+        // Parse lines into formatted HTML
+        const lines = scriptText.split('\n');
+        const htmlBlocks = lines.map((line) => {
+          const trimmed = line.trim();
+          if (!trimmed) return '';
+
+          // Standalone beat header line
+          if (/^\[[^\]]+\]$/.test(trimmed) && !/^\[(PAUSE|TONE|SFX)/i.test(trimmed)) {
+            return `<div class="beat-header">${escapeHtml(trimmed)}</div>`;
+          }
+
+          let formatted = escapeHtml(trimmed);
+          // Highlight leading timestamp beat
+          formatted = formatted.replace(/^(\[\d{1,2}:\d{2}[^\]]*\])/, '<span class="beat-header" style="display:inline-block;margin:4px 6px 4px 0;padding:3px 9px;">$1</span>');
+          // Highlight [PAUSE]
+          formatted = formatted.replace(/\[PAUSE[^\]]*\]/gi, '<span class="cue-pause">⏸ PAUSE</span>');
+          // Highlight [TONE: ...]
+          formatted = formatted.replace(/\[TONE:\s*([^\]]+)\]/gi, '<span class="cue-tone">🎙 TONE: $1</span>');
+          // Highlight [SFX: ...]
+          formatted = formatted.replace(/\[SFX:\s*([^\]]+)\]/gi, '<span class="cue-sfx">🔊 SFX: $1</span>');
+
+          return `<p class="script-para">${formatted}</p>`;
+        }).join('');
+
+        el.emptyState.classList.add('hidden');
+        el.formattedScriptOutput.innerHTML = htmlBlocks;
+        el.formattedScriptOutput.classList.remove('hidden');
+
+        // Enable studio buttons
+        const actionBtns = [
+          el.openTeleprompterBtn,
+          el.toggleEditModeBtn,
+          el.copyFullBtn,
+          el.copyCleanBtn,
+          el.downloadTxtBtn,
+          el.downloadSrtBtn,
+          el.generateSeoBtn
+        ];
+        actionBtns.forEach((b) => { b.disabled = false; });
+        document.querySelectorAll('.rewrite-action').forEach((b) => { b.disabled = false; });
+      }
+
+      // Save Script to Local History
+      function saveToHistory(scriptText) {
+        const firstLine = scriptText.split('\n').find((l) => l.trim().length > 4) || 'Bangla VO Script';
+        const entry = {
+          id: Date.now(),
+          title: firstLine.replace(/\[[^\]]+\]/g, '').trim().slice(0, 60) || 'Bangla Narrative Script',
+          genre: el.genreSelect.value,
+          date: new Date().toLocaleString('bn-BD'),
+          script: scriptText
+        };
+        state.history.unshift(entry);
+        if (state.history.length > 25) state.history.pop();
+        storageSet('bnsp_history', JSON.stringify(state.history));
+        updateHistoryBadge();
+      }
+
+      function updateHistoryBadge() {
+        el.historyCountBadge.textContent = state.history.length;
+      }
+
+      // Generate .SRT Content from Script
+      function buildSrtContent(scriptText) {
+        const cleanLines = scriptText
+          .split('\n')
+          .map((l) => l.replace(/\[[^\]]+\]/g, '').trim())
+          .filter(Boolean);
+
+        let currentSec = 0;
+        const formatTime = (sec) => {
+          const h = String(Math.floor(sec / 3600)).padStart(2, '0');
+          const m = String(Math.floor((sec % 3600) / 60)).padStart(2, '0');
+          const s = String(Math.floor(sec % 60)).padStart(2, '0');
+          const ms = String(Math.round((sec % 1) * 1000)).padStart(3, '0');
+          return `${h}:${m}:${s},${ms}`;
+        };
+
+        return cleanLines.map((line, idx) => {
+          const wordCount = line.split(/\s+/).length;
+          const dur = Math.max(2.5, (wordCount / 130) * 60);
+          const startStr = formatTime(currentSec);
+          const endStr = formatTime(currentSec + dur);
+          currentSec += dur + 0.3;
+          return `${idx + 1}\n${startStr} --> ${endStr}\n${line}\n`;
+        }).join('\n');
+      }
+
+      // Download Helper
+      function downloadFile(filename, content, mime = 'text/plain;charset=utf-8') {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      // Main Generate Handler
+      async function handleGenerateScript() {
+        const isMediaTab = state.activeInputTab === 'media';
+        const rawPlot = el.plotTextarea.value.trim();
+
+        if (isMediaTab && !state.selectedFile) {
+          showToast('অনুগ্রহ করে একটি ভিডিও/অডিও ফাইল আপলোড করুন অথবা Plot / SRT Subtitle ট্যাবে গল্প লিখুন।', 'error');
+          return;
+        }
+        if (!isMediaTab && !rawPlot) {
+          showToast('অনুগ্রহ করে মুভির গল্প বা সাবটাইটেল লিখুন (অথবা Load Sample Plot চাপুন)।', 'error');
+          return;
+        }
+
+        el.generateScriptBtn.disabled = true;
+        setProgress(true, 'ডিরেক্টর নির্দেশনা প্রস্তুত হচ্ছে...', 12);
+
+        try {
+          const userPrompt = buildDirectorUserPrompt(isMediaTab ? '' : rawPlot);
+          const resultScript = await runAIGeneration({
+            userPrompt,
+            mediaFile: isMediaTab ? state.selectedFile : null
+          });
+
+          setProgress(true, 'স্ক্রিপ্ট সম্পন্ন হয়েছে!', 100);
+          renderScriptOutput(resultScript);
+          saveToHistory(resultScript);
+          showToast('বাংলা ভয়েস-ওভার স্ক্রিপ্ট সফলভাবে তৈরি হয়েছে!', 'success');
+        } catch (err) {
+          showToast(err.message || 'স্ক্রিপ্ট তৈরিতে সমস্যা হয়েছে।', 'error');
+        } finally {
+          setTimeout(() => setProgress(false), 900);
+          el.generateScriptBtn.disabled = false;
+        }
+      }
+
+      // Quick AI Rewrite Handler
+      async function handleQuickRewrite(actionType) {
+        if (!state.currentScript) return;
+
+        const actionInstructions = {
+          hook: 'Rewrite and supercharge the opening [00:00 - HOOK] and first two paragraphs to make them irresistibly gripping for Bangladeshi YouTube viewers, while keeping the rest of the story intact in natural Bangla.',
+          dramatic: 'Intensify the dramatic storytelling, emotional tension, and suspense across the entire Bangla voice-over script, adding impactful [PAUSE] and [TONE: ...] cues.',
+          expand: 'Expand the scene descriptions, character emotions, and suspenseful narration in natural Bangla to make the voice-over script richer and more detailed.',
+          concise: 'Tighten and condense the Bangla voice-over script so it is crisp, fast-paced, and punchy without losing any key plot twists.'
+        };
+
+        el.generateScriptBtn.disabled = true;
+        document.querySelectorAll('.rewrite-action').forEach((b) => { b.disabled = true; });
+        setProgress(true, 'AI স্ক্রিপ্ট রিফাইন করছে...', 40);
+
+        try {
+          const prompt = `${actionInstructions[actionType]}\n\nOutput ONLY the updated Bangla voice-over script with structural timestamps and [PAUSE]/[TONE]/[SFX] cues.\n\nEXISTING SCRIPT:\n${state.currentScript}`;
+          const updated = await runAIGeneration({ userPrompt: prompt });
+          setProgress(true, 'আপডেট সম্পন্ন!', 100);
+          renderScriptOutput(updated);
+          saveToHistory(updated);
+          showToast('স্ক্রিপ্ট সফলভাবে রিফাইন করা হয়েছে!', 'success');
+        } catch (err) {
+          showToast(err.message || 'রিফাইন করতে সমস্যা হয়েছে।', 'error');
+        } finally {
+          setTimeout(() => setProgress(false), 800);
+          el.generateScriptBtn.disabled = false;
+          document.querySelectorAll('.rewrite-action').forEach((b) => { b.disabled = false; });
+        }
+      }
+
+      // YouTube SEO & Packaging Kit Generator
+      async function handleGenerateSeoKit() {
+        if (!state.currentScript) return;
+        el.generateSeoBtn.disabled = true;
+        setProgress(true, 'ভাইরাল YouTube SEO প্যাকেজিং তৈরি হচ্ছে...', 45);
+
+        try {
+          const seoPrompt = `Based on the following Bangla movie explanation / recap voice-over script, generate a YouTube Packaging & SEO Kit in valid JSON format with these exact keys:
+{
+  "titles": ["5 viral clickable Bangla + English mix YouTube titles"],
+  "thumbnails": ["3 short punchy 2-4 word Bangla thumbnail hook texts"],
+  "description": "An engaging SEO-optimized YouTube video description in Bangla with hashtags",
+  "tags": "comma-separated YouTube SEO tags in Bangla and English"
+}
+
+Return ONLY valid JSON without markdown code fences.
+
+SCRIPT:
+${state.currentScript.slice(0, 6000)}`;
+
+          const rawJson = await runAIGeneration({ userPrompt: seoPrompt, jsonMode: true });
+          const cleanedJson = rawJson.replace(/^```json\s*/i, '').replace(/```\s*$/i, '').trim();
+          const parsed = JSON.parse(cleanedJson);
+
+          el.seoTitlesList.innerHTML = (parsed.titles || []).map((t) => `<li>${escapeHtml(t)}</li>`).join('');
+          el.seoThumbnailsList.innerHTML = (parsed.thumbnails || []).map((t) => `<li>${escapeHtml(t)}</li>`).join('');
+          el.seoDescriptionText.textContent = parsed.description || '';
+          el.seoTagsText.textContent = parsed.tags || '';
+
+          el.seoKitCard.classList.remove('hidden');
+          el.seoKitCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          setProgress(true, 'SEO Kit প্রস্তুত!', 100);
+          showToast('YouTube SEO ও থাম্বনেইল প্যাকেজ তৈরি হয়েছে!', 'success');
+        } catch (err) {
+          showToast('SEO Kit তৈরিতে সমস্যা হয়েছে: ' + (err.message || ''), 'error');
+        } finally {
+          setTimeout(() => setProgress(false), 800);
+          el.generateSeoBtn.disabled = false;
+        }
+      }
+
+      // File Upload Selection Handler
+      function handleMediaFileSelected(file) {
+        if (!file) return;
+        if (state.selectedFileUrl) {
+          URL.revokeObjectURL(state.selectedFileUrl);
+        }
+        state.selectedFile = file;
+        state.selectedFileUrl = URL.createObjectURL(file);
+
+        el.fileNameDisplay.textContent = file.name;
+        el.fileMetaDisplay.textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB • ${file.type || 'Media File'}`;
+        el.filePreviewContainer.classList.remove('hidden');
+
+        if (file.type.startsWith('audio/')) {
+          el.videoPreview.classList.add('hidden');
+          el.audioPreview.classList.remove('hidden');
+          el.audioPreview.src = state.selectedFileUrl;
+        } else {
+          el.audioPreview.classList.add('hidden');
+          el.videoPreview.classList.remove('hidden');
+          el.videoPreview.src = state.selectedFileUrl;
+        }
+      }
+
+      // Teleprompter Smooth Scroll Engine
+      function tpScrollStep(now) {
+        if (!state.tpScrolling) return;
+        if (state.tpLastTime) {
+          const dt = (now - state.tpLastTime) / 1000;
+          const speed = parseFloat(el.tpSpeedSlider.value) || 2;
+          el.tpStage.scrollTop += speed * 42 * dt;
+        }
+        state.tpLastTime = now;
+        state.tpRafId = requestAnimationFrame(tpScrollStep);
+      }
+
+      function toggleTpScroll(forceState) {
+        state.tpScrolling = typeof forceState === 'boolean' ? forceState : !state.tpScrolling;
+        if (state.tpScrolling) {
+          el.tpPlayPauseBtn.textContent = '⏸ Pause Scroll';
+          state.tpLastTime = 0;
+          state.tpRafId = requestAnimationFrame(tpScrollStep);
+        } else {
+          el.tpPlayPauseBtn.textContent = '▶ Start Scroll';
+          if (state.tpRafId) cancelAnimationFrame(state.tpRafId);
+        }
+      }
+
+      // Browser Microphone Voice-Over Recorder
+      async function startVoiceRecording() {
+        try {
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error('আপনার ব্রাউজারে মাইক্রোফোন রেকর্ডিং সাপোর্ট নেই।');
+          }
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          state.audioChunks = [];
+          const recorder = new MediaRecorder(stream);
+          state.mediaRecorder = recorder;
+
+          recorder.ondataavailable = (e) => {
+            if (e.data.size > 0) state.audioChunks.push(e.data);
+          };
+
+          recorder.onstop = () => {
+            const blob = new Blob(state.audioChunks, { type: 'audio/webm' });
+            const audioUrl = URL.createObjectURL(blob);
+            el.recordedAudioPlayer.src = audioUrl;
+            el.recordedAudioPlayer.classList.remove('hidden');
+            el.downloadAudioLink.href = audioUrl;
+            el.downloadAudioLink.classList.remove('hidden');
+            stream.getTracks().forEach((t) => t.stop());
+            showToast('ভয়েস-ওভার রেকর্ডিং সম্পন্ন হয়েছে! নিচে প্লে বা ডাউনলোড করুন।', 'success');
+          };
+
+          recorder.start();
+          el.startRecBtn.disabled = true;
+          el.stopRecBtn.disabled = false;
+          el.recordedAudioPlayer.classList.add('hidden');
+          el.downloadAudioLink.classList.add('hidden');
+
+          state.recSeconds = 0;
+          el.recTimer.textContent = '00:00';
+          state.recInterval = setInterval(() => {
+            state.recSeconds++;
+            const m = String(Math.floor(state.recSeconds / 60)).padStart(2, '0');
+            const s = String(state.recSeconds % 60).padStart(2, '0');
+            el.recTimer.textContent = `${m}:${s}`;
+          }, 1000);
+
+          // Automatically start teleprompter scrolling when recording begins
+          toggleTpScroll(true);
+        } catch (err) {
+          showToast('মাইক্রোফোন চালু করা যায়নি: ' + err.message, 'error');
+        }
+      }
+
+      function stopVoiceRecording() {
+        if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
+          state.mediaRecorder.stop();
+        }
+        clearInterval(state.recInterval);
+        el.startRecBtn.disabled = false;
+        el.stopRecBtn.disabled = true;
+        toggleTpScroll(false);
+      }
+
+      // Render History Modal List
+      function renderHistoryList() {
+        if (!state.history.length) {
+          el.historyListContainer.innerHTML = '<p style="text-align:center; color:var(--text-secondary); padding:24px;">এখনো কোনো স্ক্রিপ্ট সেভ করা হয়নি।</p>';
+          return;
+        }
+        el.historyListContainer.innerHTML = '';
+        state.history.forEach((item) => {
+          const row = document.createElement('div');
+          row.className = 'history-item';
+          row.innerHTML = `
+            <div class="history-info">
+              <h4>${escapeHtml(item.title)}</h4>
+              <p>${escapeHtml(item.genre)} • ${escapeHtml(item.date)}</p>
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button type="button" class="btn btn-emerald btn-sm load-hist-btn">Load</button>
+              <button type="button" class="btn btn-rose btn-sm del-hist-btn">✕</button>
+            </div>
+          `;
+          row.querySelector('.load-hist-btn').addEventListener('click', () => {
+            renderScriptOutput(item.script);
+            el.historyModalBackdrop.classList.remove('open');
+            showToast('আর্কাইভ থেকে স্ক্রিপ্ট লোড হয়েছে!', 'success');
+          });
+          row.querySelector('.del-hist-btn').addEventListener('click', () => {
+            state.history = state.history.filter((h) => h.id !== item.id);
+            storageSet('bnsp_history', JSON.stringify(state.history));
+            updateHistoryBadge();
+            renderHistoryList();
+          });
+          el.historyListContainer.appendChild(row);
+        });
+      }
+
+      // Wire All Event Listeners
+      function initEvents() {
+        // Input Tabs
+        el.tabMediaBtn.addEventListener('click', () => {
+          state.activeInputTab = 'media';
+          el.tabMediaBtn.classList.add('active');
+          el.tabTextBtn.classList.remove('active');
+          el.mediaTabPane.classList.remove('hidden');
+          el.textTabPane.classList.add('hidden');
+        });
+
+        el.tabTextBtn.addEventListener('click', () => {
+          state.activeInputTab = 'text';
+          el.tabTextBtn.classList.add('active');
+          el.tabMediaBtn.classList.remove('active');
+          el.textTabPane.classList.remove('hidden');
+          el.mediaTabPane.classList.add('hidden');
+        });
+
+        // Dropzone & Media File Picker
+        el.dropzone.addEventListener('click', () => el.mediaFileInput.click());
+        el.mediaFileInput.addEventListener('change', (e) => {
+          if (e.target.files[0]) handleMediaFileSelected(e.target.files[0]);
+        });
+        el.dropzone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          el.dropzone.classList.add('dragover');
+        });
+        el.dropzone.addEventListener('dragleave', () => el.dropzone.classList.remove('dragover'));
+        el.dropzone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          el.dropzone.classList.remove('dragover');
+          if (e.dataTransfer.files[0]) handleMediaFileSelected(e.dataTransfer.files[0]);
+        });
+
+        el.removeFileBtn.addEventListener('click', () => {
+          if (state.selectedFileUrl) URL.revokeObjectURL(state.selectedFileUrl);
+          state.selectedFile = null;
+          state.selectedFileUrl = null;
+          el.mediaFileInput.value = '';
+          el.filePreviewContainer.classList.add('hidden');
+        });
+
+        // SRT / TXT Upload & Sample Plot
+        el.uploadSrtBtn.addEventListener('click', () => el.srtFileInput.click());
+        el.srtFileInput.addEventListener('change', (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            el.plotTextarea.value = reader.result || '';
+            showToast(`${file.name} সফলভাবে লোড হয়েছে!`, 'success');
+          };
+          reader.readAsText(file);
+        });
+
+        el.loadSamplePlotBtn.addEventListener('click', () => {
+          el.plotTextarea.value = SAMPLE_PLOT;
+          showToast('স্যাম্পল থ্রিলার মুভি প্লট লোড করা হয়েছে!', 'info');
+        });
+
+        // Reset Directives
+        el.resetDirectivesBtn.addEventListener('click', () => {
+          el.sourceLangSelect.selectedIndex = 0;
+          el.targetStyleSelect.selectedIndex = 0;
+          el.genreSelect.selectedIndex = 0;
+          el.pacingSelect.selectedIndex = 0;
+          el.lengthSelect.selectedIndex = 0;
+          el.perspectiveSelect.selectedIndex = 0;
+          el.directorNotesInput.value = '';
+          state.selectedTags = new Set(['সাসপেন্স ও টানটান উত্তেজনা', 'হুক-ভিত্তিক শুরু', 'সহজ ও সাবলীল বাংলা']);
+          renderToneTags();
+          showToast('ডিরেক্টর নির্দেশনা রিসেট করা হয়েছে।', 'info');
+        });
+
+        // Generate Script
+        el.generateScriptBtn.addEventListener('click', handleGenerateScript);
+
+        // Quick AI Rewrite Buttons
+        document.querySelectorAll('.rewrite-action').forEach((btn) => {
+          btn.addEventListener('click', () => handleQuickRewrite(btn.dataset.action));
+        });
+
+        // Edit Mode Toggle
+        el.toggleEditModeBtn.addEventListener('click', () => {
+          if (!state.currentScript) return;
+          state.isEditMode = !state.isEditMode;
+          if (state.isEditMode) {
+            el.inlineScriptEditor.value = state.currentScript;
+            el.scriptViewer.classList.add('hidden');
+            el.inlineScriptEditor.classList.remove('hidden');
+            el.toggleEditModeBtn.textContent = 'Save & Preview';
+          } else {
+            const edited = el.inlineScriptEditor.value.trim();
+            if (edited) renderScriptOutput(edited);
+          }
+        });
+
+        // Copy & Download Actions
+        el.copyFullBtn.addEventListener('click', () => {
+          const txt = state.isEditMode ? el.inlineScriptEditor.value : state.currentScript;
+          if (txt) copyTextToClipboard(txt, 'সম্পূর্ণ স্ক্রিপ্ট কপি হয়েছে!');
+        });
+
+        el.copyCleanBtn.addEventListener('click', () => {
+          const txt = state.isEditMode ? el.inlineScriptEditor.value : state.currentScript;
+          if (!txt) return;
+          const clean = txt.replace(/\[[^\]]+\]/g, '').replace(/\n{3,}/g, '\n\n').trim();
+          copyTextToClipboard(clean, 'ট্যাগ ছাড়া ক্লিন ভয়েস-ওভার টেক্সট কপি হয়েছে!');
+        });
+
+        el.downloadTxtBtn.addEventListener('click', () => {
+          const txt = state.isEditMode ? el.inlineScriptEditor.value : state.currentScript;
+          if (txt) downloadFile('bangla_vo_script.txt', txt);
+        });
+
+        el.downloadSrtBtn.addEventListener('click', () => {
+          const txt = state.isEditMode ? el.inlineScriptEditor.value : state.currentScript;
+          if (txt) downloadFile('bangla_vo_subtitles.srt', buildSrtContent(txt));
+        });
+
+        // SEO Kit
+        el.generateSeoBtn.addEventListener('click', handleGenerateSeoKit);
+        el.closeSeoCardBtn.addEventListener('click', () => el.seoKitCard.classList.add('hidden'));
+        document.querySelectorAll('[data-copy-target]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const target = document.getElementById(btn.dataset.copyTarget);
+            if (target) copyTextToClipboard(target.innerText.trim());
+          });
+        });
+
+        // API Modal Events
+        const openApiModal = () => {
+          el.backendModeSelect.value = state.backendMode;
+          el.providerSelect.value = state.provider;
+          syncApiModalFields();
+          el.connectionTestResult.classList.add('hidden');
+          el.apiModalBackdrop.classList.add('open');
+        };
+        el.openApiModalBtn.addEventListener('click', openApiModal);
+        el.engineStatusPill.addEventListener('click', openApiModal);
+        el.closeApiModalBtn.addEventListener('click', () => el.apiModalBackdrop.classList.remove('open'));
+
+        el.backendModeSelect.addEventListener('change', syncApiModalFields);
+        el.providerSelect.addEventListener('change', () => {
+          const p = el.providerSelect.value;
+          state.model = PROVIDERS[p].models[0] || '';
+          syncApiModalFields();
+        });
+
+        el.testConnectionBtn.addEventListener('click', async () => {
+          const tempMode = el.backendModeSelect.value;
+          const tempProv = el.providerSelect.value;
+          const tempKey = el.apiKeyInput.value.trim();
+          const tempModel = tempProv === 'custom' ? el.customModelInput.value.trim() : el.modelSelect.value;
+          const tempUrl = el.baseUrlInput.value.trim();
+
+          el.connectionTestResult.classList.remove('hidden');
+          el.connectionTestResult.style.background = 'var(--amber-soft)';
+          el.connectionTestResult.style.color = 'var(--amber)';
+          el.connectionTestResult.textContent = 'কানেকশন পরীক্ষা করা হচ্ছে...';
+
+          // Temporarily apply settings for test
+          const prev = {
+            backendMode: state.backendMode,
+            provider: state.provider,
+            model: state.model
+          };
+          state.backendMode = tempMode;
+          state.provider = tempProv;
+          state.model = tempModel;
+          if (tempKey) state.apiKeys[tempProv] = tempKey;
+          if (tempUrl) state.customEndpoints[tempProv] = tempUrl;
+
+          try {
+            const reply = await runAIGeneration({ userPrompt: 'Reply with strictly one word: READY' });
+            el.connectionTestResult.style.background = 'var(--emerald-soft)';
+            el.connectionTestResult.style.color = '#34d399';
+            el.connectionTestResult.textContent = `সফলভাবে সংযুক্ত হয়েছে! রেসপন্স: ${reply.slice(0, 40)}`;
+          } catch (err) {
+            el.connectionTestResult.style.background = 'var(--rose-soft)';
+            el.connectionTestResult.style.color = '#fb7185';
+            el.connectionTestResult.textContent = `সংযোগ ব্যর্থ: ${err.message}`;
+          } finally {
+            state.backendMode = prev.backendMode;
+            state.provider = prev.provider;
+            state.model = prev.model;
+          }
+        });
+
+        el.saveApiSettingsBtn.addEventListener('click', () => {
+          state.backendMode = el.backendModeSelect.value;
+          state.provider = el.providerSelect.value;
+          state.model = state.provider === 'custom'
+            ? el.customModelInput.value.trim()
+            : el.modelSelect.value;
+
+          const keyVal = el.apiKeyInput.value.trim();
+          if (keyVal) state.apiKeys[state.provider] = keyVal;
+          else delete state.apiKeys[state.provider];
+
+          const urlVal = el.baseUrlInput.value.trim();
+          if (urlVal) state.customEndpoints[state.provider] = urlVal;
+
+          storageSet('bnsp_mode', state.backendMode);
+          storageSet('bnsp_provider', state.provider);
+          storageSet('bnsp_model', state.model);
+          storageSet('bnsp_keys', JSON.stringify(state.apiKeys));
+          storageSet('bnsp_endpoints', JSON.stringify(state.customEndpoints));
+
+          updateEngineStatusUI();
+          el.apiModalBackdrop.classList.remove('open');
+          showToast('AI ইঞ্জিন সেটিংস সংরক্ষণ করা হয়েছে!', 'success');
+        });
+
+        // System Prompt Modal Events
+        el.openPromptModalBtn.addEventListener('click', () => {
+          el.systemPromptTextarea.value = state.systemPrompt;
+          el.promptModalBackdrop.classList.add('open');
+        });
+        el.closePromptModalBtn.addEventListener('click', () => el.promptModalBackdrop.classList.remove('open'));
+        el.resetPromptBtn.addEventListener('click', () => {
+          el.systemPromptTextarea.value = DEFAULT_SYSTEM_PROMPT;
+          showToast('ডিফল্ট সিস্টেম প্রম্পট লোড করা হয়েছে।', 'info');
+        });
+        el.savePromptBtn.addEventListener('click', () => {
+          const val = el.systemPromptTextarea.value.trim();
+          if (val) {
+            state.systemPrompt = val;
+            storageSet('bnsp_sys_prompt', val);
+            showToast('সিস্টেম প্রম্পট আপডেট হয়েছে!', 'success');
+          }
+          el.promptModalBackdrop.classList.remove('open');
+        });
+
+        // History Modal Events
+        el.openHistoryModalBtn.addEventListener('click', () => {
+          renderHistoryList();
+          el.historyModalBackdrop.classList.add('open');
+        });
+        el.closeHistoryModalBtn.addEventListener('click', () => el.historyModalBackdrop.classList.remove('open'));
+        el.closeHistoryFooterBtn.addEventListener('click', () => el.historyModalBackdrop.classList.remove('open'));
+        el.clearAllHistoryBtn.addEventListener('click', () => {
+          state.history = [];
+          storageSet('bnsp_history', '[]');
+          updateHistoryBadge();
+          renderHistoryList();
+          showToast('সব ইতিহাস মুছে ফেলা হয়েছে।', 'info');
+        });
+
+        // Teleprompter & Voice Booth Events
+        el.openTeleprompterBtn.addEventListener('click', () => {
+          const txt = state.isEditMode ? el.inlineScriptEditor.value : state.currentScript;
+          if (!txt) return;
+          el.tpTextDisplay.textContent = txt;
+          el.tpStage.scrollTop = 0;
+          el.teleprompterOverlay.classList.add('open');
+        });
+
+        el.closeTeleprompterBtn.addEventListener('click', () => {
+          toggleTpScroll(false);
+          stopVoiceRecording();
+          el.teleprompterOverlay.classList.remove('open');
+        });
+
+        el.tpPlayPauseBtn.addEventListener('click', () => toggleTpScroll());
+        el.tpResetScrollBtn.addEventListener('click', () => { el.tpStage.scrollTop = 0; });
+        el.tpMirrorBtn.addEventListener('click', () => {
+          state.tpMirrored = !state.tpMirrored;
+          el.tpTextDisplay.classList.toggle('mirrored', state.tpMirrored);
+        });
+
+        el.tpFontSlider.addEventListener('input', () => {
+          const sz = el.tpFontSlider.value + 'px';
+          el.tpFontVal.textContent = sz;
+          el.tpTextDisplay.style.fontSize = sz;
+        });
+
+        el.tpSpeedSlider.addEventListener('input', () => {
+          el.tpSpeedVal.textContent = parseFloat(el.tpSpeedSlider.value).toFixed(1) + 'x';
+        });
+
+        el.startRecBtn.addEventListener('click', startVoiceRecording);
+        el.stopRecBtn.addEventListener('click', stopVoiceRecording);
+      }
+
+      // Initialize Application
+      renderToneTags();
+      updateEngineStatusUI();
+      updateHistoryBadge();
+      initEvents();
+    })();
+  </script>
+</body>
+</html>
